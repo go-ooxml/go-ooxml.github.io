@@ -76,3 +76,34 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      # ⛔ A GREEN DEPLOY IS NOT A SERVED PAGE. This repository's Pages source
+      # was `legacy` -- Jekyll, from the branch -- so for three hours the live
+      # site was the default theme's rendering of README.md while this workflow
+      # built the Hugo site, uploaded it and reported success three times. Every
+      # signal was green and none of them looked at the URL.
+      #
+      # So look at the URL. Hugo writes its own generator meta; Jekyll writes
+      # Jekyll's. If what is served is not ours, the deploy failed whatever the
+      # steps above said.
+      - name: The page that is served is the page we built
+        run: |
+          url="${{ steps.deployment.outputs.page_url }}"
+          echo "serving: $url"
+          for i in 1 2 3 4 5 6; do
+            body=$(curl -fsSL --max-time 20 "$url" || true)
+            # ⛔ The pattern matches the MINIFIED output. `hugo --minify` drops
+            # the quotes around an attribute name, so the served page says
+            # `name=generator content="Hugo 0.167.0"` and a pattern written
+            # from the unminified source matches nothing -- a check that can
+            # only fail is not a check.
+            case "$body" in
+              *'content="Hugo'*) echo "Hugo, as built"; exit 0 ;;
+            esac
+            echo "attempt $i: not ours yet, waiting"
+            sleep 10
+          done
+          echo "::error::$url is not serving this build."
+          echo "$body" | grep -i 'name="generator"' || echo "(no generator meta at all)"
+          echo "Check Settings -> Pages: the source must be GitHub Actions, not a branch."
+          exit 1

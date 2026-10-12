@@ -3,97 +3,120 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ .Site.Title }} — the whole of PDF in Go, with no C anywhere</title>
-<meta name="description" content="go-pdfkit — read a PDF, write one, rearrange it, draw it, read it back as words and pictures, and edit it with other people. Pure Go, CGO_ENABLED=0, every library building for js/wasm, and measured against 118 863 real PDFs rather than a handful written to pass a test.">
+<title>{{ .Site.Title }} — Word, Excel and PowerPoint in Go, with no C anywhere</title>
+<meta name="description" content="go-ooxml — the Open Packaging Conventions, and Word, Excel and PowerPoint read into one document model and written back out. Pure Go, CGO_ENABLED=0, building for js/wasm, with nothing found by its path and the writer judged by LibreOffice rather than by its own reader.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{{/* ⛔ This meta is what the deploy VERIFIES. Pages served Jekyll's rendering
+     of README.md here for three hours while the workflow built this site and
+     reported success, because the Pages source was a branch and not Actions.
+     The deploy now fetches the live URL and fails unless the generator is
+     Hugo, so removing this line breaks the deploy rather than the page. */}}
+{{ hugo.Generator }}
 {{ partial "styles.html" . }}
 </head>
 <body class="lm">
   <header class="nav"><div class="wrap">
-    <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-pdfkit logo"> go-pdfkit</a>
-    <nav><a href="#corpus">Corpus</a><a href="#use">Use it</a><a href="#repos">Repositories</a><a href="#arches">Where it runs</a></nav>
+    <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-ooxml logo"> go-ooxml</a>
+    <nav><a href="#path">Nothing by its path</a><a href="#use">Writing one</a><a href="#repos">Repositories</a><a href="#limits">Limits</a><a href="#arches">Where it runs</a></nav>
     {{ partial "theme-toggle.html" . }}
   </div></header>
-  {{ partial "fork-ribbon.html" "https://github.com/go-pdfkit/pdfkit" }}
+  {{ partial "fork-ribbon.html" "https://github.com/go-ooxml/ooxml" }}
 
   <div class="hero"><div class="wrap">
     <div>
-      <h1 class="head">The whole of PDF<br><span class="accent">in Go, with no C anywhere.</span></h1>
-      <p class="sub">Read a file, write one, rearrange it, draw it, read it back as words and pictures, and <b>edit it with other people</b> — in a browser tab if you like, since every one of these builds for <code>js/wasm</code>. Fonts are parsed and shaped by <a href="https://github.com/go-opentype/opentype">go-opentype</a>, pages are rasterised by <a href="https://github.com/go-gfx/gfx">go-gfx</a>. Pure Go, <code>CGO_ENABLED=0</code>. BSD-3-Clause.</p>
+      <h1 class="head">Word, Excel and PowerPoint<br><span class="accent">in Go, with no C anywhere.</span></h1>
+      <p class="sub">A <code>.docx</code>, an <code>.xlsx</code> and a <code>.pptx</code> read into <a href="https://github.com/go-richdoc/richdoc">richdoc</a> — one document model the whole fleet shares — and Word and Excel written back out. The container underneath is its own library, so <code>.xps</code> and anything else built on OPC start from the same place. Pure Go, <code>CGO_ENABLED=0</code>, <code>GOOS=js</code> included. BSD-3-Clause.</p>
       <div class="cta">
-        <a class="btn btn-primary" href="https://go-pdfkit.github.io/app/">{{ partial "icons/link-external.html" . }}Edit a PDF in your browser →</a>
-        <a class="btn btn-ghost" href="https://go-pdfkit.github.io/docs/">{{ partial "icons/book.html" . }}Read the documentation</a>
+        <a class="btn btn-primary" href="https://github.com/go-ooxml/ooxml">{{ partial "icons/github.html" . }}Read a document →</a>
+        <a class="btn btn-ghost" href="https://pkg.go.dev/github.com/go-ooxml/opc">{{ partial "icons/book.html" . }}The package documentation</a>
       </div>
-      {{/* ⛔ DERIVED. A count typed beside the data it counts is right the day
-           it is typed and has no way of staying right; the repository total
-           comes from the list itself.
-
-           THREE of them, as on every other landing in the fleet. A fourth
-           wrapped onto a line of its own and sat there unbalanced, and the one
-           that was dropped — the coverage — is said better by its own heading
-           further down the page. */}}
-      <div class="trust"><span><b>{{ len .Site.Params.repos }}</b> repositories</span><span><b>{{ len .Site.Params.arches }}</b> architectures, tests <i>run</i></span><span><b>118 863</b> real PDFs measured</span></div>
+      {{/* ⛔ DERIVED, the first two. A count typed beside the data it counts is
+           right the day it is typed and has no way of staying right. The third
+           is a MEASUREMENT with a test behind it — opc's zip-bomb fixture —
+           and that test fails if the fixture stops being a bomb. */}}
+      <div class="trust"><span><b>{{ len .Site.Params.repos }}</b> libraries</span><span><b>{{ len .Site.Params.arches }}</b> architectures, tests <i>run</i></span><span><b>971:1</b> bomb measured, not feared</span></div>
     </div>
     <div class="term">
-      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">pdfops — zsh</span></div>
-<pre><span class="c-cmd">$ pdfops merge</span> out.pdf a.pdf b.pdf
-<span class="c-cmd">$ pdfops nup</span> -n 4 slides.pdf handout.pdf
-<span class="c-cmd">$ pdfops encrypt</span> -user letmein -allow print,copy plain.pdf locked.pdf
-<span class="c-cmd">$ pdfops text</span> -layout -pages 1 paper.pdf
-<span class="c-out">Measured on a page, in points, with what could not be read
-marked rather than guessed at.</span>
-<span class="c-cmd">$ pdfops images</span> paper.pdf pictures/
-<span class="c-out">a JPEG comes out a JPEG</span></pre>
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">main.go</span></div>
+<pre><span class="c-com">// Three formats, three readers, one model.</span>
+doc, _  := ooxml.ParseWord(docx, opc.Limits{})
+book, _ := ooxml.ParseWorkbook(xlsx, opc.Limits{})
+deck, _ := ooxml.ParsePresentation(pptx, opc.Limits{})
+
+<span class="c-com">// And back out again.</span>
+docx, _ = ooxml.WriteWord(doc)
+xlsx, _ = ooxml.WriteWorkbook(doc)
+
+<span class="c-com">// The container on its own, for .xps and the rest.</span>
+p, _ := opc.Open(bytes, opc.Limits{})
+main, _ := p.Main()
+<span class="c-out">word/document.xml — reached through a RELATIONSHIP,
+never by guessing a filename</span></pre>
     </div>
   </div></div>
 
   <div class="strip"><div class="wrap">
-    <span class="lead-line">One organisation, <b>{{ len .Site.Params.repos }}</b> libraries, every one of them pure Go</span>
+    <span class="lead-line">One organisation, <b>{{ len .Site.Params.repos }}</b> libraries, both of them pure Go</span>
     <div class="mods">{{ range .Site.Params.repos }}<a href="#repos">{{ .name }}</a>{{ end }}</div>
-    {{/* ⛔ These are the architectures the suite RUNS on, not the ones it
-         compiles for. Both the names and the count come from
-         [params.arches], because a count typed beside the names it counts is
-         right the day it is typed and has no way of staying right. */}}
-    <span class="lead-line">and the whole suite <b>runs</b> on <b>{{ len .Site.Params.arches }}</b> of them, big-endian and 32-bit included</span>
+    {{/* ⛔ The architectures the suite RUNS on, not the ones it compiles for.
+         Names and count both come from [params.arches]. */}}
+    <span class="lead-line">and the whole suite <b>runs</b> on <b>{{ len .Site.Params.arches }}</b> of them, big-endian included</span>
     <div class="mods">{{ range .Site.Params.arches }}<a href="#arches">{{ . }}</a>{{ end }}</div>
   </div></div>
 
-  <section id="corpus"><div class="wrap">
-    <span class="eyebrow">Measured, not asserted</span>
-    <h2>Against <i>118 863 real PDFs</i>, not a handful written to pass a test.</h2>
-    <p class="lead">arXiv's figures, Matplotlib and Mathematica and pdfTeX and Ghostscript and Adobe. That corpus is what found a stroke that came out at half its colour, a font that took the dots off every <em>i</em>, and a colour transform that turned every plot's paper yellow. Each of them is in the release notes of the library it was found in.</p>
+  <section id="path"><div class="wrap">
+    <span class="eyebrow">Measured, not assumed</span>
+    <h2>Nothing here is found by its <i>path</i>.</h2>
+    <p class="lead">The main part of a package is reached through a <b>relationship</b>. Measured on three files LibreOffice wrote in the same minute, the one relationship type that names it points at three different places — and a reader that hardcoded <code>word/document.xml</code> would work on most Word documents and on nothing else.</p>
     <div class="grid">
-      <div class="card"><div class="ico">📂</div><h3>They open</h3><p><b>118 833</b> of the <b>118 835</b> files that really are PDFs. Of the 118 863 collected, 27 are PNGs named <code>.pdf</code> and one is a PostScript file; of the rest, two are truncated past recovery.</p></div>
-      <div class="card"><div class="ico">🔁</div><h3>They round-trip</h3><p><b>1 536 769 753</b> content operations read, and every one of them rewrites to an identical fingerprint. 118 833 files encrypt, decrypt and compress with <b>every page byte for byte the same</b>.</p></div>
-      <div class="card"><div class="ico">🖌️</div><h3>They draw</h3><p><b>4 108</b> pages rasterise with no panics and six blank, and the biggest changes are put beside what the operating system's own renderer draws — pixels hashed before and after, never an exit status.</p></div>
-      <div class="card"><div class="ico">🔤</div><h3>They read back</h3><p><b>121 946</b> pages come back as <b>34 million</b> characters, each piece with a page, a place, a size and what it says. A piece the document gave no way to read is <b>marked rather than guessed at</b>.</p></div>
+      <div class="card"><div class="ico">🔗</div><h3>Three files, three targets</h3><p>The <code>officeDocument</code> relationship named <code>word/document.xml</code> in the <code>.docx</code>, <code>xl/workbook.xml</code> in the <code>.xlsx</code> and <code>ppt/presentation.xml</code> in the <code>.pptx</code> — and the standard lets a producer choose another name again.</p></div>
+      <div class="card"><div class="ico">🔠</div><h3>A real producer wrote its own URI in the wrong case</h3><p>In that same <code>.xlsx</code>, the core-properties relationship type came out with <b><code>officedocument</code> in lower case</b> while the <code>.docx</code> and the <code>.pptx</code> from the same program, the same version and the same minute wrote <code>officeDocument</code>. Types are compared without regard to case, and a test fails if a future fixture stops showing it — so the rule cannot quietly become folklore.</p></div>
+      <div class="card"><div class="ico">📐</div><h3>A target is relative to the part that declared it</h3><p><code>styles.xml</code> from <code>word/document.xml</code> is <code>word/styles.xml</code>, and <code>media\image1.png</code> is one too. A target that <b>climbs out</b> of the package is refused rather than cleaned into something harmless, and an <b>external</b> one is an error rather than a path — <code>http://example.com/x</code> cleaned into a part name becomes a lookup that fails for a reason with nothing to do with what went wrong.</p></div>
+      <div class="card"><div class="ico">🧱</div><h3>One container, three vocabularies</h3><p>Which is the opposite of ODF, where one vocabulary spans every kind of document — and the reason there are three readers here and not one. A heading is a paragraph wearing a style; a cell's value is usually not in the cell but in a shared strings table; DrawingML carries its formatting as attributes where WordprocessingML uses elements.</p></div>
     </div>
   </div></section>
 
   <section id="use"><div class="wrap">
-    <span class="eyebrow">The API</span>
-    <h2>Verbs on a document, and a page as pixels.</h2>
-    <p class="lead">The same operations the command line exposes are a library first. Nothing shells out, nothing is fetched at run time, and the whole of it compiles to one <code>js/wasm</code> module with no <code>SharedArrayBuffer</code> and no CDN.</p>
-    <div class="term" style="margin-top:22px">
-      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">main.go</span></div>
-<pre><span class="c-com">// Take three pages out of a report, turn one the right way up,</span>
-<span class="c-com">// stamp the lot, and write it out.</span>
-doc, _ := ops.Open(bytes)
-doc.Select(<span class="c-out">"4-6"</span>)
-doc.SetRotation(<span class="c-out">"2"</span>, 90)
-doc.Watermark(<span class="c-out">"all"</span>, <span class="c-out">"DRAFT"</span>)
-out, _ := doc.Bytes()
+    <span class="eyebrow">Writing one</span>
+    <h2>What comes back is a <i>package</i>, not a rendering.</h2>
+    <p class="lead">Word decides how wide a column is, where a page breaks and what a heading looks like. These libraries say which paragraph is a heading and which cells are a row, and the styles part gives those names something to mean. Three things the file has to get right, where the program refuses the whole document rather than the part:</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🧩</div><h3>Every cell needs a paragraph</h3><p>A <code>w:tc</code> with nothing in it is what makes Word call a document corrupt, so a short row is filled out and an empty cell still gets one.</p></div>
+      <div class="card"><div class="ico">␣</div><h3><code>xml:space="preserve"</code> on every run</h3><p>Without it a reader that follows the standard trims a run, and a document rebuilt from runs that each lost their edges reads as onewordafteranother.</p></div>
+      <div class="card"><div class="ico">📑</div><h3>A sheet name is built, never taken</h3><p>Excel refuses a name over 31 characters, one holding <code>: \ / ? * [ ]</code>, or a duplicate — and it refuses the <b>file</b>, not the name.</p></div>
+      <div class="card"><div class="ico">🏷️</div><h3>The heading styles are defined, not borrowed</h3><p>A <code>w:pStyle</code> naming a style the package does not define works in Word, which knows <code>Heading1</code> already — and shows as plain text in a reader that does not, which is most of them. Defining them costs a few hundred bytes and is the difference between a heading and a paragraph everywhere but Word.</p></div>
+    </div>
+    <p class="lead" style="margin-top:22px">⛔ It is <b>not</b> a round trip. A document read from Word and written back loses everything richdoc has no word for — the fonts, the margins, the section properties, the revision history — because richdoc is a <i>document</i> model and not a <code>.docx</code> model. Said here because "write what you read" is the obvious thing to expect and it is not what this does.</p>
+  </div></section>
 
-<span class="c-com">// Draw a page, and read one back.</span>
-img, _ := render.Page(src, 1, render.Options{DPI: 150})
-text, _ := extract.Text(src, 1)</pre>
+  <section id="judge"><div class="wrap">
+    <span class="eyebrow">How it is checked</span>
+    <h2>The judge for a writer cannot be its own <i>reader</i>.</h2>
+    <p class="lead">A package our own reader is delighted with can be one Word refuses. Where LibreOffice is installed the tests <b>ask it</b>: it opens what we wrote and converts it, and a file it will not open fails the test. Where it is not installed the test says so and skips, rather than passing quietly.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🎯</div><h3>The same package twice is the same bytes</h3><p>A map walk is random, and a writer whose output changes between runs cannot be diffed, cached or signed. The determinism test builds <b>eight</b> relationship sources and compares five times: with three sources a map walk comes out in the right order one time in six, and the test reported a determinism that was not there.</p></div>
+      <div class="card"><div class="ico">📂</div><h3>The control for the writer is the reader</h3><p>Every package a test builds is opened again with <code>Open</code>. A writer checked against a string of expected XML is checked against what its author believed; the thing that has to be true is that it can be <b>read</b>.</p></div>
+      <div class="card"><div class="ico">✍️</div><h3>Two things are asserted by their spelling, and we say which</h3><p>An <code>Override</code>'s <code>PartName</code> starts with a slash, and the <code>.rels</code> Default is present. Our own reader accepts a package without either, so reading it back proves nothing — and the programs that refuse such a package are the ones nothing here can run. The control is a <code>.docx</code> Word itself produced, which carries both.</p></div>
+      <div class="card"><div class="ico">💯</div><h3>100% of statements, both libraries</h3><p>Including the branches that report a bad file, which are most of the interesting ones in a format reader — and the race detector is on for the lane that runs them.</p></div>
+    </div>
+  </div></section>
+
+  <section id="limits"><div class="wrap">
+    <span class="eyebrow">What a file may ask for</span>
+    <h2>A ZIP says how big it will be once opened. That is a number <i>in a file</i>.</h2>
+    <p class="lead">It costs the author of that file nothing to claim four gigabytes, and a reader that believes it allocates them. Every limit has a number beside it, and the bomb in the tests is <b>measured rather than feared</b>: 8 638 bytes on disk open to 8 MiB, a ratio of <b>971:1</b>, and the test fails if the fixture stops being a bomb.</p>
+    <div class="grid">
+      <div class="card"><h3>64 MiB — one part, opened</h3><p>Refused from its <b>declared</b> size, before a byte is inflated — then the read is bounded again, in case the declaration was a lie the other way.</p></div>
+      <div class="card"><h3>384 MiB — every part together</h3><p>One part under the ceiling says nothing about a thousand of them.</p></div>
+      <div class="card"><h3>8 192 parts · 4 096 relationships per part</h3><p>Each decides an allocation made <b>before anything is read</b>, from a count the file chose.</p></div>
+      <div class="card"><h3>256 MiB — the file itself</h3><p>And <code>opc.Limits{}</code> means every default, so the bounds apply to a caller who passed nothing.</p></div>
     </div>
   </div></section>
 
   <section id="repos"><div class="wrap">
     <span class="eyebrow">The organisation</span>
-    <h2>One library a job, and they compose.</h2>
-    <p class="lead">Each is its own module with its own release line, so a program takes the reader without the rasteriser, or the rasteriser without the writer.</p>
+    <h2>The container is one library, the vocabularies another.</h2>
+    <p class="lead">Each is its own module with its own release line, so a program that only needs to walk an OPC package — an <code>.xps</code>, a <code>.vsdx</code>, anything built on the same conventions — takes <code>opc</code> and nothing else.</p>
     <div class="grid">
       {{ range .Site.Params.repos }}
       <article class="card">
@@ -108,34 +131,23 @@ text, _ := extract.Text(src, 1)</pre>
   <section id="arches"><div class="wrap">
     <span class="eyebrow">Where it runs</span>
     <h2>{{ len .Site.Params.arches }} architectures, and the tests <i>run</i> on every one.</h2>
-    <p class="lead">Cross-compiling proves a program builds. It says nothing about what it does when a byte order, a word size or a floating-point unit differs — and that is where a format parser lives. Every repository here runs its whole suite on each of these on every push: {{ $n := len .Site.Params.arches }}{{ range $i, $a := .Site.Params.arches }}{{ if $i }}{{ if eq $i (sub $n 1) }} and {{ else }}, {{ end }}{{ end }}<code>{{ $a }}</code>{{ end }}.</p>
+    <p class="lead">Cross-compiling proves a program builds. It says nothing about what it does when a byte order or a word size differs — and that is where a format parser lives. Both repositories run their whole suite on each of these on every push: {{ $n := len .Site.Params.arches }}{{ range $i, $a := .Site.Params.arches }}{{ if $i }}{{ if eq $i (sub $n 1) }} and {{ else }}, {{ end }}{{ end }}<code>{{ $a }}</code>{{ end }} — with cross-builds besides for <code>js/wasm</code>, Windows and macOS.</p>
     <div class="grid">
-      <div class="card"><div class="ico">🔄</div><h3>s390x is big-endian</h3><p>Every lane was green from the first run, which is the useful kind of result: nothing in the stack had quietly assumed a byte order. A PDF is full of two- and four-byte integers, and a reader that reads them the wrong way round on one machine is a reader nobody can trust on any.</p></div>
-      <div class="card"><div class="ico">📏</div><h3>386 and arm are 32-bit</h3><p>They found four real defects. One of them — a guard converting a float before it could judge it — crashes on arm64 as well, so a 32-bit lane paid for itself on a 64-bit machine. 386 runs <b>natively</b>, not under emulation, because an emulator that loses floating-point state across a preemption makes a flaky lane out of correct code.</p></div>
-      <div class="card"><div class="ico">⚠️</div><h3>loong64 is pinned, and we say why</h3><p>Its lane names Go 1.26.4 rather than the current release, because <a href="https://github.com/golang/go/issues/81000">golang/go#81000</a> miscompiles a float-to-integer conversion there and the backport is still open. We found it with this suite, on real LoongArch silicon, and reported it upstream. A pinned lane with a reason beats a green one with a workaround nobody wrote down.</p></div>
-      <div class="card"><div class="ico">🌐</div><h3>and <code>js/wasm</code>, which is the workbench</h3><p>The same libraries compile to one wasm binary with no C, no CDN and no <code>SharedArrayBuffer</code> — which is why <a href="https://go-pdfkit.github.io/app/">the workbench</a> opens a file, rearranges it and saves it back without any of it leaving the machine.</p></div>
-    </div>
-  </div></section>
-
-  <section id="type"><div class="wrap">
-    <span class="eyebrow">Text, fonts and widgets</span>
-    <h2>A subset, an encoding, and text you can still copy.</h2>
-    <div class="grid">
-      <div class="card"><div class="ico">✂️</div><h3>Every embedded font is a subset</h3><p>Identity-H encoding, a per-glyph <code>/W</code> width array and a <code>/ToUnicode</code> CMap, so copy and paste still work. TrueType <code>glyf</code> outlines embed as a subsetted <code>FontFile2</code> / <code>CIDFontType2</code> with a <code>/CIDToGIDMap</code> stream; CFF and OpenType outlines embed as a <b>charstring-subsetted</b> <code>FontFile3</code> / <code>CIDFontType0</code>. Only a CID-keyed CFF or a CFF2 variable font falls back to embedding the whole table.</p></div>
-      <div class="card"><div class="ico">🌍</div><h3>Shaped, where shaping is the point</h3><p><code>TextShaped</code> runs the go-opentype shaper's GSUB and GPOS tables, so Arabic joins, Indic reorders and CJK sits where it should — rather than a run of glyphs laid out left to right and called typesetting.</p></div>
-      <div class="card"><div class="ico">🧩</div><h3>A widget tree, printed</h3><p><code>Page.AddWidget</code> and <code>Page.AddWidgetVector</code> put a <a href="https://github.com/go-widgets/toolkit">go-widgets/toolkit</a> tree on a page — the first as a rasterised image XObject, <b>pixel-identical to the screen</b>; the second as PDF vector operators, so fills and strokes stay crisp and the text stays selectable, a TrueType widget label's own face embedded as real Type0 text.</p></div>
-      <div class="card"><div class="ico">🎯</div><h3>The same bytes twice</h3><p>The writer is deterministic: the same document written twice is the same file, which is what makes a before-and-after comparison mean anything at all.</p></div>
+      <div class="card"><div class="ico">🔄</div><h3>s390x is big-endian</h3><p>A ZIP is full of little-endian integers, and so is every ZIP64 extra field. The standard library reads them for us — which is exactly the kind of assumption a big-endian lane exists to check rather than to trust.</p></div>
+      <div class="card"><div class="ico">🌐</div><h3><code>GOOS=js</code> is a build target, not an afterthought</h3><p>Nothing here touches a file: <code>Open</code> takes bytes and <code>Build</code> returns them. A document converter in a browser tab needs no server, and nothing it opens leaves the machine.</p></div>
+      <div class="card"><div class="ico">📦</div><h3><code>opc</code> has no dependencies at all</h3><p>Outside the standard library, nothing. <code>ooxml</code> adds exactly two: this container, and richdoc.</p></div>
+      <div class="card"><div class="ico">🔍</div><h3>Vet and gofmt are gates, not habits</h3><p>On every push, on every lane, and the coverage gate reads the <b>profile</b> rather than the percentage — <code>total: 99.95%</code> prints as <code>100.0%</code>.</p></div>
     </div>
   </div></section>
 
   <section id="eco" style="padding-top:6px"><div class="wrap">
     <div class="band">
-      <h2>100 % statement coverage, including the branches that report a bad file.</h2>
-      <p>And it <b>runs</b> on {{ len .Site.Params.arches }} architectures, not merely compiles for them. Pure Go, cgo disabled, BSD-3-Clause.</p>
-      <a class="btn btn-ghost" href="https://github.com/go-pdfkit">{{ partial "icons/github.html" . }}Read the source on GitHub →</a>
+      <h2>The container, the three vocabularies, and one model the rest of the fleet already reads.</h2>
+      <p>From here a <code>.docx</code> becomes Markdown, reStructuredText, LaTeX or a PDF with no format-specific code in between — because <a href="https://github.com/go-richdoc/richdoc">richdoc</a> is what every one of those reads and writes.</p>
+      <a class="btn btn-ghost" href="https://github.com/go-ooxml">{{ partial "icons/github.html" . }}Read the source on GitHub →</a>
     </div>
   </div></section>
 
-  <footer><div class="wrap"><span>© the go-pdfkit authors · BSD-3-Clause</span><span>Pure Go · CGO_ENABLED=0 · every library builds for js/wasm</span></div></footer>
+  <footer><div class="wrap"><span>© the go-ooxml authors · BSD-3-Clause</span><span>Pure Go · CGO_ENABLED=0 · <code>GOOS=js</code> included</span></div></footer>
 </body>
 </html>
