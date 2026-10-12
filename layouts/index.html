@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ .Site.Title }} — the whole of PDF in Go, with no C anywhere</title>
+<meta name="description" content="go-pdfkit — read a PDF, write one, rearrange it, draw it, read it back as words and pictures, and edit it with other people. Pure Go, CGO_ENABLED=0, every library building for js/wasm, and measured against 118 863 real PDFs rather than a handful written to pass a test.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{{ partial "styles.html" . }}
+</head>
+<body class="lm">
+  <header class="nav"><div class="wrap">
+    <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-pdfkit logo"> go-pdfkit</a>
+    <nav><a href="#corpus">Corpus</a><a href="#use">Use it</a><a href="#repos">Repositories</a><a href="#arches">Where it runs</a></nav>
+    {{ partial "theme-toggle.html" . }}
+  </div></header>
+  {{ partial "fork-ribbon.html" "https://github.com/go-pdfkit/pdfkit" }}
+
+  <div class="hero"><div class="wrap">
+    <div>
+      <h1 class="head">The whole of PDF<br><span class="accent">in Go, with no C anywhere.</span></h1>
+      <p class="sub">Read a file, write one, rearrange it, draw it, read it back as words and pictures, and <b>edit it with other people</b> — in a browser tab if you like, since every one of these builds for <code>js/wasm</code>. Fonts are parsed and shaped by <a href="https://github.com/go-opentype/opentype">go-opentype</a>, pages are rasterised by <a href="https://github.com/go-gfx/gfx">go-gfx</a>. Pure Go, <code>CGO_ENABLED=0</code>. BSD-3-Clause.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://go-pdfkit.github.io/app/">{{ partial "icons/link-external.html" . }}Edit a PDF in your browser →</a>
+        <a class="btn btn-ghost" href="https://go-pdfkit.github.io/docs/">{{ partial "icons/book.html" . }}Read the documentation</a>
+      </div>
+      {{/* ⛔ DERIVED. A count typed beside the data it counts is right the day
+           it is typed and has no way of staying right; the repository total
+           comes from the list itself.
+
+           THREE of them, as on every other landing in the fleet. A fourth
+           wrapped onto a line of its own and sat there unbalanced, and the one
+           that was dropped — the coverage — is said better by its own heading
+           further down the page. */}}
+      <div class="trust"><span><b>{{ len .Site.Params.repos }}</b> repositories</span><span><b>{{ len .Site.Params.arches }}</b> architectures, tests <i>run</i></span><span><b>118 863</b> real PDFs measured</span></div>
+    </div>
+    <div class="term">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">pdfops — zsh</span></div>
+<pre><span class="c-cmd">$ pdfops merge</span> out.pdf a.pdf b.pdf
+<span class="c-cmd">$ pdfops nup</span> -n 4 slides.pdf handout.pdf
+<span class="c-cmd">$ pdfops encrypt</span> -user letmein -allow print,copy plain.pdf locked.pdf
+<span class="c-cmd">$ pdfops text</span> -layout -pages 1 paper.pdf
+<span class="c-out">Measured on a page, in points, with what could not be read
+marked rather than guessed at.</span>
+<span class="c-cmd">$ pdfops images</span> paper.pdf pictures/
+<span class="c-out">a JPEG comes out a JPEG</span></pre>
+    </div>
+  </div></div>
+
+  <div class="strip"><div class="wrap">
+    <span class="lead-line">One organisation, <b>{{ len .Site.Params.repos }}</b> libraries, every one of them pure Go</span>
+    <div class="mods">{{ range .Site.Params.repos }}<a href="#repos">{{ .name }}</a>{{ end }}</div>
+    {{/* ⛔ These are the architectures the suite RUNS on, not the ones it
+         compiles for. Both the names and the count come from
+         [params.arches], because a count typed beside the names it counts is
+         right the day it is typed and has no way of staying right. */}}
+    <span class="lead-line">and the whole suite <b>runs</b> on <b>{{ len .Site.Params.arches }}</b> of them, big-endian and 32-bit included</span>
+    <div class="mods">{{ range .Site.Params.arches }}<a href="#arches">{{ . }}</a>{{ end }}</div>
+  </div></div>
+
+  <section id="corpus"><div class="wrap">
+    <span class="eyebrow">Measured, not asserted</span>
+    <h2>Against <i>118 863 real PDFs</i>, not a handful written to pass a test.</h2>
+    <p class="lead">arXiv's figures, Matplotlib and Mathematica and pdfTeX and Ghostscript and Adobe. That corpus is what found a stroke that came out at half its colour, a font that took the dots off every <em>i</em>, and a colour transform that turned every plot's paper yellow. Each of them is in the release notes of the library it was found in.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">📂</div><h3>They open</h3><p><b>118 833</b> of the <b>118 835</b> files that really are PDFs. Of the 118 863 collected, 27 are PNGs named <code>.pdf</code> and one is a PostScript file; of the rest, two are truncated past recovery.</p></div>
+      <div class="card"><div class="ico">🔁</div><h3>They round-trip</h3><p><b>1 536 769 753</b> content operations read, and every one of them rewrites to an identical fingerprint. 118 833 files encrypt, decrypt and compress with <b>every page byte for byte the same</b>.</p></div>
+      <div class="card"><div class="ico">🖌️</div><h3>They draw</h3><p><b>4 108</b> pages rasterise with no panics and six blank, and the biggest changes are put beside what the operating system's own renderer draws — pixels hashed before and after, never an exit status.</p></div>
+      <div class="card"><div class="ico">🔤</div><h3>They read back</h3><p><b>121 946</b> pages come back as <b>34 million</b> characters, each piece with a page, a place, a size and what it says. A piece the document gave no way to read is <b>marked rather than guessed at</b>.</p></div>
+    </div>
+  </div></section>
+
+  <section id="use"><div class="wrap">
+    <span class="eyebrow">The API</span>
+    <h2>Verbs on a document, and a page as pixels.</h2>
+    <p class="lead">The same operations the command line exposes are a library first. Nothing shells out, nothing is fetched at run time, and the whole of it compiles to one <code>js/wasm</code> module with no <code>SharedArrayBuffer</code> and no CDN.</p>
+    <div class="term" style="margin-top:22px">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">main.go</span></div>
+<pre><span class="c-com">// Take three pages out of a report, turn one the right way up,</span>
+<span class="c-com">// stamp the lot, and write it out.</span>
+doc, _ := ops.Open(bytes)
+doc.Select(<span class="c-out">"4-6"</span>)
+doc.SetRotation(<span class="c-out">"2"</span>, 90)
+doc.Watermark(<span class="c-out">"all"</span>, <span class="c-out">"DRAFT"</span>)
+out, _ := doc.Bytes()
+
+<span class="c-com">// Draw a page, and read one back.</span>
+img, _ := render.Page(src, 1, render.Options{DPI: 150})
+text, _ := extract.Text(src, 1)</pre>
+    </div>
+  </div></section>
+
+  <section id="repos"><div class="wrap">
+    <span class="eyebrow">The organisation</span>
+    <h2>One library a job, and they compose.</h2>
+    <p class="lead">Each is its own module with its own release line, so a program takes the reader without the rasteriser, or the rasteriser without the writer.</p>
+    <div class="grid">
+      {{ range .Site.Params.repos }}
+      <article class="card">
+        <h3><a href="{{ .url }}">{{ .name }}</a> <span class="tag {{ .status }}">{{ .status }}</span></h3>
+        <p>{{ .blurb | markdownify }}</p>
+        <p><a href="{{ .url }}">repository</a> · <a href="https://pkg.go.dev/{{ .pkg }}">pkg.go.dev</a></p>
+      </article>
+      {{ end }}
+    </div>
+  </div></section>
+
+  <section id="arches"><div class="wrap">
+    <span class="eyebrow">Where it runs</span>
+    <h2>{{ len .Site.Params.arches }} architectures, and the tests <i>run</i> on every one.</h2>
+    <p class="lead">Cross-compiling proves a program builds. It says nothing about what it does when a byte order, a word size or a floating-point unit differs — and that is where a format parser lives. Every repository here runs its whole suite on each of these on every push: {{ $n := len .Site.Params.arches }}{{ range $i, $a := .Site.Params.arches }}{{ if $i }}{{ if eq $i (sub $n 1) }} and {{ else }}, {{ end }}{{ end }}<code>{{ $a }}</code>{{ end }}.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🔄</div><h3>s390x is big-endian</h3><p>Every lane was green from the first run, which is the useful kind of result: nothing in the stack had quietly assumed a byte order. A PDF is full of two- and four-byte integers, and a reader that reads them the wrong way round on one machine is a reader nobody can trust on any.</p></div>
+      <div class="card"><div class="ico">📏</div><h3>386 and arm are 32-bit</h3><p>They found four real defects. One of them — a guard converting a float before it could judge it — crashes on arm64 as well, so a 32-bit lane paid for itself on a 64-bit machine. 386 runs <b>natively</b>, not under emulation, because an emulator that loses floating-point state across a preemption makes a flaky lane out of correct code.</p></div>
+      <div class="card"><div class="ico">⚠️</div><h3>loong64 is pinned, and we say why</h3><p>Its lane names Go 1.26.4 rather than the current release, because <a href="https://github.com/golang/go/issues/81000">golang/go#81000</a> miscompiles a float-to-integer conversion there and the backport is still open. We found it with this suite, on real LoongArch silicon, and reported it upstream. A pinned lane with a reason beats a green one with a workaround nobody wrote down.</p></div>
+      <div class="card"><div class="ico">🌐</div><h3>and <code>js/wasm</code>, which is the workbench</h3><p>The same libraries compile to one wasm binary with no C, no CDN and no <code>SharedArrayBuffer</code> — which is why <a href="https://go-pdfkit.github.io/app/">the workbench</a> opens a file, rearranges it and saves it back without any of it leaving the machine.</p></div>
+    </div>
+  </div></section>
+
+  <section id="type"><div class="wrap">
+    <span class="eyebrow">Text, fonts and widgets</span>
+    <h2>A subset, an encoding, and text you can still copy.</h2>
+    <div class="grid">
+      <div class="card"><div class="ico">✂️</div><h3>Every embedded font is a subset</h3><p>Identity-H encoding, a per-glyph <code>/W</code> width array and a <code>/ToUnicode</code> CMap, so copy and paste still work. TrueType <code>glyf</code> outlines embed as a subsetted <code>FontFile2</code> / <code>CIDFontType2</code> with a <code>/CIDToGIDMap</code> stream; CFF and OpenType outlines embed as a <b>charstring-subsetted</b> <code>FontFile3</code> / <code>CIDFontType0</code>. Only a CID-keyed CFF or a CFF2 variable font falls back to embedding the whole table.</p></div>
+      <div class="card"><div class="ico">🌍</div><h3>Shaped, where shaping is the point</h3><p><code>TextShaped</code> runs the go-opentype shaper's GSUB and GPOS tables, so Arabic joins, Indic reorders and CJK sits where it should — rather than a run of glyphs laid out left to right and called typesetting.</p></div>
+      <div class="card"><div class="ico">🧩</div><h3>A widget tree, printed</h3><p><code>Page.AddWidget</code> and <code>Page.AddWidgetVector</code> put a <a href="https://github.com/go-widgets/toolkit">go-widgets/toolkit</a> tree on a page — the first as a rasterised image XObject, <b>pixel-identical to the screen</b>; the second as PDF vector operators, so fills and strokes stay crisp and the text stays selectable, a TrueType widget label's own face embedded as real Type0 text.</p></div>
+      <div class="card"><div class="ico">🎯</div><h3>The same bytes twice</h3><p>The writer is deterministic: the same document written twice is the same file, which is what makes a before-and-after comparison mean anything at all.</p></div>
+    </div>
+  </div></section>
+
+  <section id="eco" style="padding-top:6px"><div class="wrap">
+    <div class="band">
+      <h2>100 % statement coverage, including the branches that report a bad file.</h2>
+      <p>And it <b>runs</b> on {{ len .Site.Params.arches }} architectures, not merely compiles for them. Pure Go, cgo disabled, BSD-3-Clause.</p>
+      <a class="btn btn-ghost" href="https://github.com/go-pdfkit">{{ partial "icons/github.html" . }}Read the source on GitHub →</a>
+    </div>
+  </div></section>
+
+  <footer><div class="wrap"><span>© the go-pdfkit authors · BSD-3-Clause</span><span>Pure Go · CGO_ENABLED=0 · every library builds for js/wasm</span></div></footer>
+</body>
+</html>
