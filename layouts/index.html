@@ -25,7 +25,7 @@
   <div class="hero"><div class="wrap">
     <div>
       <h1 class="head">Word, Excel and PowerPoint<br><span class="accent">in Go, with no C anywhere.</span></h1>
-      <p class="sub">A <code>.docx</code>, an <code>.xlsx</code> and a <code>.pptx</code> read into <a href="https://github.com/go-richdoc/richdoc">richdoc</a> — one document model the whole fleet shares — and Word and Excel written back out. The container underneath is its own library, so <code>.xps</code> and anything else built on OPC start from the same place. Pure Go, <code>CGO_ENABLED=0</code>, <code>GOOS=js</code> included. BSD-3-Clause.</p>
+      <p class="sub">A <code>.docx</code>, an <code>.xlsx</code> and a <code>.pptx</code> read into <a href="https://github.com/go-richdoc/richdoc">richdoc</a> — one document model the whole fleet shares — and Word and Excel written back out, and a deck of rendered slides written as a <code>.pptx</code> with its speaker notes. The container underneath is its own library, so <code>.xps</code> and anything else built on OPC start from the same place. Pure Go, <code>CGO_ENABLED=0</code>, <code>GOOS=js</code> included. BSD-3-Clause.</p>
       <div class="cta">
         <a class="btn btn-primary" href="https://github.com/go-ooxml/ooxml">{{ partial "icons/github.html" . }}Read a document →</a>
         <a class="btn btn-ghost" href="https://pkg.go.dev/github.com/go-ooxml/opc">{{ partial "icons/book.html" . }}The package documentation</a>
@@ -46,6 +46,7 @@ deck, _ := ooxml.ParsePresentation(pptx, opc.Limits{})
 <span class="c-com">// And back out again.</span>
 docx, _ = ooxml.WriteWord(doc)
 xlsx, _ = ooxml.WriteWorkbook(doc)
+pptx, _ = ooxml.WritePresentation(slides) <span class="c-com">// a picture per slide, with notes</span>
 
 <span class="c-com">// The container on its own, for .xps and the rest.</span>
 p, _ := opc.Open(bytes, opc.Limits{})
