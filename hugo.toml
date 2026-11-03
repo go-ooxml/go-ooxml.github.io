@@ -41,6 +41,8 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
   chipFgDark = "#9e99f1"
   statsEnd = "#d5d3f9"
   bandText = "#e3e1fb"
+  accent = "#1e1b4b"
+  accentDark = "#726bea"
 
 [[params.repos]]
   name = "opc"
