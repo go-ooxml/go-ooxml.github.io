@@ -25,11 +25,9 @@
   <div class="hero"><div class="wrap">
     <div>
       <h1 class="head">Word, Excel and PowerPoint<br><span class="accent">in Go, with no C anywhere.</span></h1>
-      <p class="sub">A <code>.docx</code>, an <code>.xlsx</code> and a <code>.pptx</code> read into <a href="https://github.com/go-richdoc/richdoc">richdoc</a> — one document model the whole fleet shares — and Word and Excel written back out, and a deck of rendered slides written as a <code>.pptx</code> with its speaker notes. The container underneath is its own library, so <code>.xps</code> and anything else built on OPC start from the same place. Pure Go, <code>CGO_ENABLED=0</code>, <code>GOOS=js</code> included. BSD-3-Clause.</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="https://github.com/go-ooxml/ooxml">{{ partial "icons/github.html" . }}Read a document →</a>
-        <a class="btn btn-ghost" href="https://pkg.go.dev/github.com/go-ooxml/opc">{{ partial "icons/book.html" . }}The package documentation</a>
-      </div>
+      <p class="sub">A <code>.docx</code>, an <code>.xlsx</code> and a <code>.pptx</code> read into <a href="https://github.com/go-richdoc/richdoc">richdoc</a> — one document model the whole fleet shares — and Word and Excel written back out, and a deck of rendered slides written as a <code>.pptx</code> with its speaker notes. The container underneath is its own library, so <code>.xps</code> and anything else built on OPC start from the same place. {{ if partial "mantra-on.html" . }}Go{{ else }}Pure Go{{ end }}, <code>{{ if not (partial "mantra-on.html" $) }}CGO_ENABLED=0{{ end }}</code>, <code>GOOS=js</code> included. {{ if not (partial "mantra-on.html" $) }}BSD-3-Clause{{ end }}.</p>
+      {{/* [[params.cta]] in hugo.toml: the kit renders the row */}}
+      {{ partial "cta.html" . }}
       {{/* ⛔ DERIVED, the first two. A count typed beside the data it counts is
            right the day it is typed and has no way of staying right. The third
            is a MEASUREMENT with a test behind it — opc's zip-bomb fixture —
@@ -149,6 +147,6 @@ never by guessing a filename</span></pre>
     </div>
   </div></section>
 
-  <footer><div class="wrap"><span>© the go-ooxml authors · BSD-3-Clause</span><span>Pure Go · CGO_ENABLED=0 · <code>GOOS=js</code> included</span></div></footer>
+  <footer><div class="wrap"><span>© the go-ooxml authors{{ if not (partial "mantra-on.html" $) }} · BSD-3-Clause{{ end }}</span><span>{{ if not (partial "mantra-on.html" $) }}Pure Go · {{ end }}{{ if not (partial "mantra-on.html" $) }}CGO_ENABLED=0 · {{ end }}<code>GOOS=js</code> included</span></div></footer>
 </body>
 </html>
